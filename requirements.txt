@@ -9,3 +9,4 @@ twitchAPI
 feedparser
 openai
 gitpython
+gradio_client
