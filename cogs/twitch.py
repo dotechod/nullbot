@@ -159,7 +159,7 @@ class TwitchCog(commands.Cog):
 
                 embed.timestamp = data.event.started_at
 
-                await channel.send(embed=embed)
+                await channel.send("<@&1187602012926390334>", embed=embed)
         except Exception as e:
             pass
     async def send_offline_notification(self, data: StreamOfflineEvent):
