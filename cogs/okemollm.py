@@ -35,8 +35,11 @@ class olm(commands.Cog):
                     client.predict,
                     message=thingy,
                     history=[],
+                    search=False,
+                    job_id=thingy,
                     use_thought=True,
-                    api_name="/user"
+                    system_prompt="",
+                    api_name="/chat"
                 )
                 content = result[-1]['content'][0]['text']
                 content = re.sub(r'<thought>.*?</thought>', '', content, flags=re.DOTALL)
