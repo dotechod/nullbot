@@ -17,7 +17,7 @@ bot = commands.Bot(
     command_prefix=',',
     intents=intents,
     application_id=1345951741144989766,
-    activity=discord.Game(name="Playing Half-Life 36"),
+    activity=discord.Game(name="Playing Half-Life 38"),
 )
 
 
