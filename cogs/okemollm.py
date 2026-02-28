@@ -8,7 +8,6 @@ import sys
 import asyncio
 import re
 import secrets
-import matplotlib.pyplot as plt
 import aiohttp
 import urllib.parse
 import io
