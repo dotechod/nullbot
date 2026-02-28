@@ -44,4 +44,7 @@ async def main():
     await bot.start(os.getenv("TOKEN"), reconnect=True)
 
 
-asyncio.run(main())
+try:
+    asyncio.run(main())
+except KeyboardInterrupt:
+    pass

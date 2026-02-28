@@ -10,3 +10,6 @@ feedparser
 openai
 gitpython
 gradio_client
+matplotlib
+svglib
+reportlab
