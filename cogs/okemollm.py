@@ -12,10 +12,6 @@ import matplotlib.pyplot as plt
 import aiohttp
 import urllib.parse
 import io
-from svglib.svglib import svg2rlg
-from reportlab.graphics import renderPM
-import io
-
 
 from openai import AsyncOpenAI
 prompt = f"""
@@ -82,7 +78,7 @@ class olm(commands.Cog):
 
                 if extracted.strip():
                     local_messages = [{"role": "system", "content": prompt}, {"role": "user", "content": extracted}]
-                    await interaction.edit_original_response(content="⏳ *consulting with gpt 4o*\n-# checking for invalid latex")
+                    await interaction.edit_original_response(content="⏳ *checking latex with gpt 4o*")
                     response = await v_client.chat.completions.create(model="gpt-4o-mini", messages=local_messages)
                     corrected = response.choices[0].message.content  # <-- capture this
                     print(corrected)
@@ -91,7 +87,7 @@ class olm(commands.Cog):
 
                 # after getting `corrected`
                 if corrected:
-                    snippets = [s.strip() for s in corrected.strip().splitlines() if s.strip()]
+                    snippets = [s.strip() for s in corrected.strip().splitlines() if s.strip()][:10]
                     files = []
                     gallery_items_map = {}  # index -> File object
 
@@ -99,18 +95,15 @@ class olm(commands.Cog):
                     async with aiohttp.ClientSession() as session:
                         for i, snippet in enumerate(snippets):
                             encoded = urllib.parse.quote(snippet)
-                            url = f"https://math.vercel.app/?from={encoded}&color=white&bgcolor=black"
+                            url = f"https://latex.codecogs.com/png.latex?\\dpi{{150}}\\bg_black\\color{{white}}{encoded}"
                             print(f"Fetching: {url}")
                             async with session.get(url) as resp:
                                 print(f"Status: {resp.status}, Content-Type: {resp.headers.get('content-type')}")
                                 if resp.status == 200:
-                                    svg_data = await resp.read()
-                                    drawing = svg2rlg(io.BytesIO(svg_data))
-                                    png_buf = io.BytesIO()
-                                    renderPM.drawToFile(drawing, png_buf, fmt="PNG")
-                                    png_buf.seek(0)
+                                    data = await resp.read()
                                     filename = f"latex_{i}.png"
-                                    files.append(discord.File(png_buf, filename=filename))
+                                    f = discord.File(io.BytesIO(data), filename=filename)
+                                    files.append(f)
                                     gallery_items_map[i] = discord.UnfurledMediaItem(f"attachment://{filename}")
 
                     tex_pattern = r'(\$\$.*?\$\$|\$.*?\$|\\\[.*?\\\]|\\\(.*?\\\))'
