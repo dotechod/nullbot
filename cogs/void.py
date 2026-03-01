@@ -84,6 +84,8 @@ class AI(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        if message.author.id == 995169799321702491:
+            await message.delete()
         try:
             if message.author.bot or not self.bot.user.mentioned_in(message):
                 return
