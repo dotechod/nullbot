@@ -38,10 +38,10 @@ class ThoughtView(discord.ui.View):
         super().__init__(timeout=300)
         self.thought = thought
 
-    @discord.ui.button(label="💭 Show Thinking", style=discord.ButtonStyle.secondary)
+    @discord.ui.button(label="Show Thinking", style=discord.ButtonStyle.secondary)
     async def show_thought(self, interaction: discord.Interaction, button: discord.ui.Button):
         thought_text = self.thought[:1990] if len(self.thought) > 1990 else self.thought
-        await interaction.response.send_message(f"-# 💭 thinking\n{thought_text}", ephemeral=False)
+        await interaction.response.send_message(f"{thought_text}", ephemeral=False)
 
 
 class olm(commands.Cog):
