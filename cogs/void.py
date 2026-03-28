@@ -85,7 +85,7 @@ class AI(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         try:
-            if message.author.id == 1345951741144989766:
+            if message.author.id == 1345951741144989766 or not self.bot.user.mentioned_in(message):
                 return
 
             await message.add_reaction('⏳')
