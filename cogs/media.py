@@ -39,7 +39,7 @@ class Media(commands.Cog):
         try:
             if match := self.pattern.search(message.content.strip("<>")):
                 await message.add_reaction("⏳")
-                link = match.group(0)
+                link = match.group(0).split("?")[0]
                 if link in song_cache:
                     song = song_cache[link]
                 else:
@@ -73,11 +73,11 @@ class Media(commands.Cog):
                 )
 
                 if lastfm_data.status_code == 200:
-                    data = lastfm_data.json()
-                    if 'track' in data:
-                        print(data)
-                        playcount = int(data['track']['playcount'])
-                        listeners = int(data['track']['listeners'])
+                    lfm_data = lastfm_data.json()
+                    if 'track' in lfm_data:
+                        print(lfm_data)
+                        playcount = int(lfm_data['track']['playcount'])
+                        listeners = int(lfm_data['track']['listeners'])
                     else:
                         playcount = 0
                         listeners = 0
