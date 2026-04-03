@@ -134,6 +134,7 @@ class Media(commands.Cog):
             c_id = data[message.guild.id]["server_log"]  # server logging channel
             ch = self.bot.get_channel(c_id)
             log = traceback.format_exc()
+            traceback.print_exc()
             await ch.send(f"## song.link cog has thrown problem :((("
                                 f"```{log}```")
             await message.reply(f"```{log}```", delete_after=5)
