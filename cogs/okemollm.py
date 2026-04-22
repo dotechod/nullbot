@@ -65,7 +65,7 @@ class olm(commands.Cog):
         try:
             models = await client.models.list()
             print(models.data)
-            result = await v_client.chat.completions.create(model="octan", messages=[{"role": "user", "content": thingy}])
+            result = await v_client.chat.completions.create(model="octan-1.2b", messages=[{"role": "user", "content": thingy}])
             content = result[-1]['content'][0]['text']
 
             thought_match = re.search(r'<thought>(.*?)</thought>|<think>(.*?)</think>', content, flags=re.DOTALL)
