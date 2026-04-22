@@ -63,7 +63,8 @@ class olm(commands.Cog):
     async def olm(self, interaction, thingy: str):
         await interaction.response.send_message(f"*⏳ OLM {secrets.choice(olm_is)}...*")
         try:
-            print(client.models)
+            models = await client.models.list()
+            print(models.data)
             result = await v_client.chat.completions.create(model="octan", messages=[{"role": "user", "content": thingy}])
             content = result[-1]['content'][0]['text']
 
