@@ -43,7 +43,7 @@ class Media(commands.Cog):
                 if link in song_cache:
                     song = song_cache[link]
                 else:
-                    song = requests.get(f"https://api.song.link/v1-alpha.1/links?url={link}")
+                    song = requests.get(f" {link}")
                     song_cache[link] = song
                 info = song.json()
 
