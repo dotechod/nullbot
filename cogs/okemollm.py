@@ -29,7 +29,7 @@ v_client = AsyncOpenAI(
 
 
 client = AsyncOpenAI(
-    api_key="OKMO-47455981bfaa271276277a8025b3fdb933a1e43676eb7306",
+    api_key="sk-none",
     base_url="https://api.okemovail.com/v1/"
 )
 
