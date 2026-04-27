@@ -5,6 +5,7 @@ from discord.ext import commands, tasks
 import feedparser
 
 prev_xml = None
+feedparser.USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 class YT(commands.Cog):
     def __init__(self, bot):
@@ -17,6 +18,10 @@ class YT(commands.Cog):
     async def fetch_xml(self):
         try:
             d = feedparser.parse("https://www.youtube.com/feeds/videos.xml?channel_id=UCxgkDK11DnpzXhCXe7n7mjw")
+
+            if not d.entries:
+                return
+
             latest = d.entries[0]
 
             global prev_xml
