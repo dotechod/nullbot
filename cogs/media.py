@@ -43,7 +43,7 @@ class Media(commands.Cog):
                 if link in song_cache:
                     song = song_cache[link]
                 else:
-                    song = requests.get(f"{link}")
+                    song = requests.get(f"https://api.song.link/v1-alpha.1/links?url={link}")
                     song_cache[link] = song
                 info = song.json()
 
@@ -135,7 +135,7 @@ class Media(commands.Cog):
             ch = self.bot.get_channel(c_id)
             log = traceback.format_exc()
             traceback.print_exc()
-            await ch.send(f"## song.link cog has thrown problem :((("
+            await ch.send(f"## big sad happened"
                                 f"```{log}```")
             await message.reply(f"```{log}```", delete_after=5)
 
