@@ -147,6 +147,7 @@ class Media(commands.Cog):
 
     @commands.hybrid_command(name="song")
     async def song_cmd(self, ctx, link):
+        await ctx.defer()
         try:
             if match := self.pattern.search(link.strip("<>")):
                 link = match.group(0).split("?")[0]
