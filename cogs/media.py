@@ -146,6 +146,9 @@ class Media(commands.Cog):
         await ctx.reply("Cache cleared.")
 
     @commands.hybrid_command(name="song")
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    @app_commands.describe(link="The song link (Spotify, Apple Music, YouTube)")
     async def song_cmd(self, ctx, link):
         await ctx.defer()
         try:
