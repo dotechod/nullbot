@@ -146,9 +146,9 @@ class Media(commands.Cog):
         await ctx.reply("Cache cleared.")
 
     @commands.hybrid_command(name="song")
-    async def song_cmd(self, message, link):
+    async def song_cmd(self, ctx, link):
         try:
-            if match := self.pattern.search(message.content.strip("<>")):
+            if match := self.pattern.search(link.strip("<>")):
                 link = match.group(0).split("?")[0]
                 if link in song_cache:
                     song = song_cache[link]
@@ -233,17 +233,21 @@ class Media(commands.Cog):
 
                 view.add_item(container)
 
-                await message.edit(suppress=True)
-                await message.reply(view=view, mention_author=False)
+                if ctx.interaction is None:
+                    try:
+                        await ctx.message.edit(suppress=True)
+                    except:
+                        pass
+                await ctx.reply(view=view, mention_author=False)
 
         except:
-            c_id = data[message.guild.id]["server_log"]  # server logging channel
+            c_id = data[ctx.guild.id]["server_log"]  # server logging channel
             ch = self.bot.get_channel(c_id)
             log = traceback.format_exc()
             traceback.print_exc()
             await ch.send(f"## big sad happened"
                           f"```{log}```")
-            await message.reply(f"```{log}```", delete_after=5)
+            await ctx.reply(f"```{log}```", delete_after=5)
 
 
 
