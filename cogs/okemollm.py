@@ -11,6 +11,7 @@ import secrets
 import aiohttp
 import urllib.parse
 import io
+import httpx
 
 from openai import AsyncOpenAI
 prompt = f"""
@@ -19,6 +20,12 @@ They will be separated by newlines, and you must output the corrected snippet th
 When you respond, you must respond with ONLY the corrected latex snippet, and DO NOT add any mathjax dollar signs/indicators
 
 """
+
+async def strip_stainless_headers(request: httpx.Request):
+    for key in list(request.headers.keys()):
+        if key.lower().startswith("x-stainless"):
+            del request.headers[key]
+
 messages = [
     {'role': 'system', 'content': prompt}
 ]
@@ -31,7 +38,7 @@ v_client = AsyncOpenAI(
 client = AsyncOpenAI(
     api_key="sk-none",
     base_url="https://api.okemovail.com/v1",
-    default_headers={"User-Agent": "Mozilla/5.0"}
+    http_client=httpx.AsyncClient(event_hooks={"request": [strip_stainless_headers]})
 )
 
 olm_is = ["is thinking", "is cooking up a response", "wants you to order a Shamrock Shake® from McDonalds for only $5.19", "is crunching data", "thinks you're dumb", "thinks 1+1 equals ~~4~~ 2", "is making Minecraft 2", "is not real", "is <UNK><UNK><UNK><UNK><UNK>", "is probably not claude", "is typing on virtual keyboards", "is 100% artificial", "is baking 3,000 cookies", "thinks you should buy 30,000,000 Robux", "is consuming more RAM", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", "will respond very good", "meows cutely", "i okemollm okemollm, and glittery okemollm, glittery glittery storm glittery storm okemollm glittery storm okemollm glittery storm okemollm", "can almost write a haiku", "is counting sheep", "aaaaaaaaaaaaaa", "is miwi certified", "is hallucinating excel spreadsheets", "dreams of kiwis", "- powered by 13 oceans", "2: electric boogaloo", "is migrating to mars"]
