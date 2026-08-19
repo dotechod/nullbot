@@ -74,6 +74,7 @@ class olm(commands.Cog):
         try:
             result = await client.chat.completions.create(model="octan", messages=[{"role": "user", "content": thingy}])
             content = result.choices[0].message.content
+            print(result)
 
             thought_match = re.search(r'<thought>(.*?)</thought>|<think>(.*?)</think>', content, flags=re.DOTALL)
             thought_content = next((m for m in thought_match.groups() if m),
