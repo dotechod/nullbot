@@ -12,6 +12,7 @@ from PIL import Image, ImageDraw, ImageFont
 import requests
 import embeds
 import aiohttp
+import httpx
 
 ryderize_running = False
 
@@ -29,36 +30,14 @@ class Images(commands.Cog):
 
     @app_commands.command(name='ryderize', description='adds a photo of ryder/ pointing to an image')
     async def ryderize(self, interaction, image: discord.Attachment, scale: float = 1.0):
-        await interaction.response.defer()
-        try:
-            img = await image.read()
-            with Image.open(io.BytesIO(img)) as i:
-                i = i.convert("RGBA")
-
-                ryder = Image.open(os.path.abspath('./data/ryder.png')).convert("RGBA")
-
-                scale_factor = i.height / ryder.height
-                new_width = int(round(ryder.width * scale_factor * scale))
-                new_height = int(round(ryder.height * scale_factor * scale))
-                resized_ryder = ryder.resize((new_width, new_height))
-
-                i.paste(resized_ryder, (i.width - new_width, 0), resized_ryder)
-
-                if i.height > 1080:
-                    ratio = 1080 / i.height
-                    new_width = int(i.width * ratio)
-                    final = i.resize((new_width, 1080))
-                else:
-                    final = i
-
-                final.save('i.png')
-                file = discord.File(fp='i.png', filename='i.png')
-                embed = embeds.image(img='i.png', user=interaction.user.name, command='ryderize')
-                await interaction.followup.send(file=file, embed=embed)
-        except Exception as e:
-            print(traceback.print_exc())
-            err = traceback.format_exc()
-            await interaction.followup.send(embed=embeds.error(err))
+        async with httpx.AsyncClient() as c:
+            r = await c.post(
+                "https://api.okemovail.com/v1/chat/completions",
+                headers={"Authorization": "Bearer sk-none", "Content-Type": "application/json"},
+                json={"model": "octan", "messages": [{"role": "user", "content": "test"}]},
+            )
+            await interaction.response.send_message(r.status_code)
+            print(r.status_code, r.text[:300])
 
     @commands.command(name='inspire', description='be inspired')
     async def inspire(self, ctx):
