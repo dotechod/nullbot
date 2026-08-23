@@ -101,24 +101,26 @@ class ReplyModal(discord.ui.Modal, title="Continue the conversation"):
             )
             return
 
-        await interaction.response.defer()
+        await interaction.response.send_message(f"*⏳ OLM {secrets.choice(olm_is)}...*")
+        placeholder_msg = await interaction.original_response()
+
         user_text = str(self.followup)
         new_history = history + [{"role": "user", "content": user_text}]
 
         try:
             raw_content = await call_okemovail(new_history)
         except Exception as e:
-            await interaction.followup.send(f"⚠️ {e}", ephemeral=True)
+            await placeholder_msg.edit(content=f"⚠️ {e}")
             return
 
         content, thought_content = strip_thought(raw_content)
         new_history.append({"role": "assistant", "content": raw_content})
 
         view = build_view(user_text, content, has_thought=bool(thought_content))
-        msg = await interaction.followup.send(view=view, wait=True)
+        await placeholder_msg.edit(content="", view=view)
 
-        self.cog.thought_store[msg.id] = thought_content
-        self.cog._remember(msg.id, new_history)
+        self.cog.thought_store[placeholder_msg.id] = thought_content
+        self.cog._remember(placeholder_msg.id, new_history)
 
 
 class olm(commands.Cog):
