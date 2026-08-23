@@ -15,8 +15,7 @@ import io
 from openai import AsyncOpenAI
 
 prompt = """
-You are OLM, a helpful AI assistant chatting in a Discord thread.
-Keep responses conversational and reasonably concise.
+
 """
 
 OKEMOVAIL_URL = "https://api.okemovail.com/v1/chat/completions"
