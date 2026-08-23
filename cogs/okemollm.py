@@ -162,7 +162,6 @@ class olm(commands.Cog):
         await interaction.response.send_message(f"*⏳ OLM {secrets.choice(olm_is)}...*")
         try:
             history = [
-                {"role": "system", "content": prompt},
                 {"role": "user", "content": thingy},
             ]
             raw_content = await call_okemovail(history)
